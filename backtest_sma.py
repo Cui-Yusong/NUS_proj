@@ -2,7 +2,7 @@ from datetime import datetime
 import backtrader as bt
 import tushare as ts
 import pandas as pd
-class MyStrategy(bt.Strategy):
+class MyStrategy1(bt.Strategy):
     params=(('maperiod',20),
             ('printlog',False),)
     def __init__(self):
@@ -88,7 +88,7 @@ data = bt.feeds.PandasData(dataname=df,fromdate=start1,todate=end1)
 cerebro.adddata(data) 
 # 将交易策略加载到回测系统中
 #设置printlog=True，表示打印交易日志log
-cerebro.addstrategy(MyStrategy,maperiod=20,printlog=False) 
+cerebro.addstrategy(MyStrategy1,maperiod=20,printlog=False) 
 # 设置初始资本为10000
 startcash = float(input('输入回测初始资本：'))
 cerebro.broker.setcash(startcash) 
