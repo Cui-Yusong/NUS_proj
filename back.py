@@ -7,6 +7,8 @@ import numpy as np
 import flask
 import json
 
+import fun2
+
 app = flask.Flask(__name__, static_url_path='')
 
 global code
@@ -60,18 +62,38 @@ def getPrice():
     return json.dumps(stock_dict)
 
 
+@app.route("/getData_grid", methods=["GET"])
+def getData_grid():
+    stocks = fun2.all_stock()
+    # stocks = {}
+    # for i in range(5):
+    #     item = {
+    #         'code': i,
+    #         'name': 'name',
+    #         'open': 500,
+    #         'close': 400,
+    #         'high': 300,
+    #         'low': 200,
+    #         'amount': 100,
+    #         'change': 'temp',
+    #         'history': [j for j in range(25)],
+    #         'rating': 2,
+    #     }
+    #     stocks[i] = item
+    # ans = {}
+    # ans['ans'] = stocks
+    return json.dumps(stocks)
+
+
 @app.route("/getData", methods=["GET"])
 def getdata():
-    with open("./data_demo.json",
-              "r") as f:
-        stock1 = json.load(f, strict=False)
-    stock_code = '600519'
+    global code
+    stock_code = code
     start_date = '2021-05-10'
     end_date = '2021-08-10'
     k_type = 'd'
     datatype = 'volume'
     stock2 = fun1.get_stock(code=stock_code, start=start_date, end=end_date, ktype=k_type, data_type='close', flag=True)
-
     return json.dumps(stock2)
 
 

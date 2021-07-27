@@ -1,20 +1,31 @@
 import * as wjcCore from '@grapecity/wijmo';
-import { RequiredValidator, MinNumberValidator, MinDateValidator, MaxNumberValidator, MaxDateValidator } from './validation';
+import {
+    RequiredValidator,
+    MinNumberValidator,
+    MinDateValidator,
+    MaxNumberValidator,
+    MaxDateValidator
+} from './validation';
+
 //
 export class KeyValue {
 }
-KeyValue.NotFound = { key: -1, value: '' };
+
+KeyValue.NotFound = {key: -1, value: ''};
+
 //
 export class Country {
 }
-Country.NotFound = { id: -1, name: '', flag: '' };
+
+Country.NotFound = {id: -1, name: '', flag: ''};
+
 //
 export class DataService {
     constructor() {
         this._products = ['Widget', 'Gadget', 'Doohickey'];
         this._colors = ['Black', 'White', 'Red', 'Green', 'Blue'];
         this._countries = [
-            { id: 0, name: '人民币', flag: 'us' }
+            {id: 0, name: '人民币', flag: 'us'}
             // { id: 1, name: 'Germany', flag: 'de' },
             // { id: 2, name: 'UK', flag: 'gb' },
             // { id: 3, name: 'Japan', flag: 'jp' },
@@ -49,32 +60,54 @@ export class DataService {
         //     ]
         // };
     }
+
     getCountries() {
         return this._countries;
     }
+
     getProducts() {
         return this._products;
     }
+
     getColors() {
         return this._colors;
     }
+
     getHistoryData() {
         return this._getRandomArray(25, 100);
     }
-    getData(count) {
-        const data = [];
-        const dt = new Date();
-        const year = dt.getFullYear();
-        const itemsCount = Math.max(count, 5);
-        // add items
-        for (let i = 0; i < itemsCount; i++) {
-            const item = this._getItem(i, year);
-            data.push(item);
-        }
-        console.log(data)
 
+    getData(count) {
+        var data = [];
+        $.ajaxSettings.async = false;
+        $.getJSON("/getData_grid", {}).done(
+            function (rs) {
+                console.log(rs)
+                for (var i = 0; i < 500; i++) {
+                    data.push(rs[i])
+                }
+                console.log(data)
+            }
+        )
         return data;
+
     }
+
+    // getData2(count) {
+    //     const data = [];
+    //     const dt = new Date();
+    //     const year = dt.getFullYear();
+    //     const itemsCount = Math.max(count, 5);
+    //     // add items
+    //     for (let i = 0; i < itemsCount; i++) {
+    //         const item = this._getItem(i, year);
+    //         data.push(item);
+    //     }
+    //     console.log(data)
+    //
+    //     return data;
+    // }
+
     _getItem(i, year) {
         const item = {
             code: i,
@@ -86,14 +119,15 @@ export class DataService {
             amount: 100,
             change: 'temp',
             history: this.getHistoryData(),
-            rating: Math.ceil((i)%6),
-                  };
+            rating: Math.ceil((i) % 6),
+        };
         return item;
     }
 
     _getRandomIndex(arr) {
         return Math.floor(Math.random() * arr.length);
     }
+
     _getRandomArray(len, maxValue) {
         const arr = [];
         for (let i = 0; i < len; i++) {

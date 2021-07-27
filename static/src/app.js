@@ -78,7 +78,7 @@ class App {
                 //     })
                 // },
                 {
-                    binding: 'name', header: 'Name', width: 145,
+                    binding: 'name', header: 'Name', width: 200,
                 },
                 { binding: 'open', header: 'Open', format: 'c', isRequired: false, width: 100 },
                 { binding: 'close', header: 'Close', format: 'c', isRequired: false, width: 100 },
@@ -86,7 +86,7 @@ class App {
                 { binding: 'high', header: 'High', format: 'c', isRequired: false, width: 100 },
 
                 { binding: 'low', header: 'Low', format: 'c', isRequired: false, width: 100 },
-                { binding: 'amount', header: 'Amount', isRequired: false, width: 150 },
+                { binding: 'amount', header: 'Volume', isRequired: false, width: 200 },
 
                 {
                     binding: 'history', header: 'History', width: 180, align: 'center', allowSorting: false,
