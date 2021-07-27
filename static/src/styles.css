@@ -1,0 +1,73 @@
+@import 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.css';
+
+body {
+    font-size: 1.5em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Light", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.toolbar-item {
+    margin-bottom: 6px;
+}
+
+.wj-flexgridsearch {
+    width: 100%;
+}
+
+.wj-flexgrid {
+    height: 330px;
+}
+
+.wj-flexgrid .wj-cell {
+    padding: 7px;
+    border: none;
+}
+
+.wj-cell.wj-state-invalid:not(.wj-header)::after {
+    top: -14px;
+    border: 14px solid transparent;
+    border-right-color: red;
+}
+
+.flag-icon {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.color-tile {
+    display: inline-block;
+    position: relative;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+}
+
+.change-up {
+    color: darkgreen;
+}
+
+.change-up:after {
+    content: '\25b2';
+    margin-left: 0.5em;
+}
+
+.change-down {
+    color: darkred;
+}
+
+.change-down:after {
+    content: '\25bc';
+    margin-left: 0.5em;
+}
+
+.cell-rating {
+    font-size: 12px;
+}
+
+.wj-flexgrid .wj-detail {
+    padding: 4px 16px;
+}
+
+.wj-detail h3 {
+    margin: 10px 0;
+}

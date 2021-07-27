@@ -16,6 +16,7 @@ def all_stock():
     data = ts.get_today_all()
     data.index = data.code
     data = data.sort_index()
+
     return data
 
 def row_by_code(market,codes):
@@ -34,21 +35,21 @@ def sort_by_col(market,which_col):
 
 if __name__ == '__main__':
     market = all_stock()
+    market.to_csv('./all_stock.csv')
     print(market)
     
-    #按股票代码查看
-    codes = input('Please input the stock code: ')
-    by_code = row_by_code(market,codes)
-    print(by_code)
-    
-    #按股票名查看
-    tip = input('Please input the stock name: ')
-    by_name = row_by_name(market,tip)
-    print(by_name)
+    # #按股票代码查看
+    # codes = input('Please input the stock code: ')
+    # by_code = row_by_code(market,codes)
+    # print(by_code)
+    #
+    # #按股票名查看
+    # tip = input('Please input the stock name: ')
+    # by_name = row_by_name(market,tip)
+    # print(by_name)
+    #
+    # #按列排序
+    # which_col = input('Please input the column name: ')
+    # sortby = sort_by_col(market,which_col)
+    # print(sortby.head(20))
 
-    #按列排序
-    which_col = input('Please input the column name: ')
-    sortby = sort_by_col(market,which_col)
-    print(sortby.head(20))
-    
-    

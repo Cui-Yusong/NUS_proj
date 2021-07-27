@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="resources.title_mapvPolylineTime"></title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" rel="stylesheet"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css"/>
+    <link rel="stylesheet" href="https://iclient.supermap.io/dist/leaflet/iclient-leaflet.min.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script type="text/javascript" src="https://iclient.supermap.io/dist/leaflet/iclient-leaflet.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://cdn.bootcss.com/proj4js/2.4.3/proj4.js"></script>
+    <script src="https://cdn.bootcss.com/proj4leaflet/1.0.1/proj4leaflet.min.js"></script>
+
+    <style>
+        #map {
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+            position: absolute;
+            z-index: 1;
+        }
+
+        #div1 {
+            position: absolute;
+            z-index: 3;
+            margin: 0 120px;
+        }
+
+        #div2 {
+            position: absolute;
+            z-index: 3;
+            margin: 80px 5px;
+        }
+
+        input {
+            outline-style: none;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            /*padding: 0 5px;*/
+            /*width: 170px;*/
+            /*height: 40px;*/
+            font-size: 12px;
+            font-weight: 700;
+            font-family: "Microsoft soft";
+        }
+
+        button {
+            width: 110px; /*设置按钮宽度*/
+            height: 40px; /*设置按钮高度*/
+            color: white; /*字体颜色*/
+            background-color: cornflowerblue; /*按钮背景颜色*/
+            border-radius: 3px; /*让按钮变得圆滑一点*/
+            border-width: 0; /*消去按钮丑的边框*/
+            margin: 0;
+            outline: none; /*取消轮廓*/
+            font-family: KaiTi; /*字体设置为楷体*/
+            font-size: 17px; /*设置字体大小*/
+            text-align: center; /*字体居中*/
+            cursor: pointer; /*设置鼠标箭头手势*/
+        }
+
+        button:hover { /*鼠标移动时的颜色变化*/
+            background-color: green;
+        }
+    </style>
+
+</head>
+<body style=" margin: 0;overflow: hidden;background: #fff;width: 100%;height:100%;position: absolute;top: 0;">
+
+<div id="div1">
+    <p><label for="tmp_date"></label>
+        <input type="datetime-local" name="test1date" id="tmp_date"></p>
+</div>
+
+<div id="div2">
+    <p>
+        <button onclick="make_query()">make query</button>
+    </p>
+    <p>
+    </p>
+    <p>
+        <button id="t" onclick="clear_tracks()">clear tracks</button>
+    </p>
+</div>
+
+<div id="map" style="margin:0 auto;width: 100%;height: 100%"></div>
+
+<script type="text/javascript" include="mapv"
+        src="http://localhost:8080/project/Templates/include-leaflet.js"></script>
+
+
+</body>
+<script>
+
+    var iconArr = [];
+    var fir = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/1.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[1] = fir;
+    var sec = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/2.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[2] = sec;
+    var third = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/3.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[3] = third;
+    var forth = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/4.png',
+              iconSize: [40, 40], // size of the icon
+    });
+    iconArr[4] = forth;
+    var fifth = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/5.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[5] = fifth;
+    var six = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/6.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[6] = six;
+    var seven = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/7.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[7] = seven;
+    var eight = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/8.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[8] = eight;
+    var ninth = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/9.png',
+              iconSize: [40, 40], // size of the icon
+    });
+    iconArr[9] = ninth;
+    var tenth = L.icon({
+        iconUrl: 'http://localhost:8080/project/Templates/10.png',
+        iconSize: [40, 40], // size of the icon
+    });
+    iconArr[10] = tenth;
+
+
+    const map = L.map('map', {
+        center: [30.6669, 104.0655],
+        crs: L.CRS.EPSG3857,
+        zoom: 12,
+        zoomControl: true,
+        preferCanvas: false
+    });
+    // L.marker([30.6669, 104.0655], {icon: tenth}).addTo(map)
+
+    var baseLayers = {
+        "OSM": L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            // maxZoom: 18
+        }),
+         "normal": L.tileLayer('https://api.mapbox.com/styles/v1/brotherihavecameout/ckoq1jxu24akg17lej7ffyf1l/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYnJvdGhlcmloYXZlY2FtZW91dCIsImEiOiJja29xMGdqcTQwNGllMm9taWg5M3BjZjdnIn0.Tv6ooHaIUnWMZlOEw4J93Q  ', {
+            // maxZoom: 18
+        }).addTo(map),
+        "currentLayer": L.tileLayer('https://api.mapbox.com/styles/v1/brotherihavecameout/ckoq0kang93jj17p9ym6r9kqk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYnJvdGhlcmloYXZlY2FtZW91dCIsImEiOiJja29xMGdqcTQwNGllMm9taWg5M3BjZjdnIn0.Tv6ooHaIUnWMZlOEw4J93Q', {
+            // maxZoom: 18
+        }),
+    };
+
+    let overLays = {};
+    let ctrl = L.control.layers(baseLayers, null);
+    ctrl.addTo(map);
+    var myGroup;
+
+    function make_query() {
+        tmp_date = $("#tmp_date").val();
+        $.getJSON("/makequery", {
+            "date": tmp_date
+        }).done(
+            function (rs) {
+                // var points = rs["answer"]
+                var tmp_lat = rs['lat']
+                var tmp_lng = rs['lng']
+                var price = rs['price']
+                var density = rs['density']
+                console.log(tmp_lat)
+                console.log(tmp_lng)
+                var layers = [];
+                for (var i = 1; i < 11; i++) {
+                    var tmpMarker = L.marker([tmp_lat[i], tmp_lng[i]], {icon: iconArr[i]}).bindPopup("The density of this area is: " + density[i] + ".<br> The average price of the order is: " + price[i]+".");
+                    layers.push(tmpMarker);
+                }
+                if (myGroup != null) {
+                    myGroup.clearLayers();
+                }
+                myGroup = L.layerGroup(layers);
+                map.addLayer(myGroup);
+            }
+        )
+    }
+
+    var resultLayer;
+
+    function newMarker(e) {
+        let p1 = e.latlng;
+        console.log(p1);
+        $.getJSON("/click", {
+            "lat1": p1.lat,
+            "lng1": p1.lng
+        }).done(
+            function (rs) {
+                var timeData = rs["answer"];
+                var dataSet2 = new mapv.DataSet(timeData);
+                var options2 = {
+                    fillStyle: 'rgba(255, 255, 250,0.2)',
+                    globalCompositeOperation: "lighter",
+                    size: 1.5,
+                    animation: {
+                        stepsRange: {
+                            start: 0,
+                            end: 100
+                        },
+                        trails: 3,
+                        duration: 5,
+                    },
+                    draw: 'simple'
+                };
+                if (resultLayer != null) {
+                    resultLayer.clearData();
+                }
+                resultLayer = L.supermap.mapVLayer(dataSet2, options2);
+                resultLayer.addTo(map);
+            }
+        )
+    }
+
+    map.on('click', newMarker);
+
+    function clear_tracks() {
+        resultLayer.clearData()
+    }
+
+
+</script>
+</html>

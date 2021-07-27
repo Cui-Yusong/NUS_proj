@@ -1,7 +1,7 @@
 import pandas as pd  
 import numpy as np
 from scipy import stats
-import tushare as ts 
+import tushare as ts
 import matplotlib.pyplot as plt
 import datetime
 import csv
@@ -34,18 +34,32 @@ def suit_code_name(code):
 def get_stock(code, start='2010-01-01', end=time_now, ktype='d',data_type='close',flag=True):
     #获取历史行情数据
     stock = ts.get_k_data(code=code,start=start,end=end,ktype=ktype,autype='qfq')
-    print(stock)
-    stock.index = pd.to_datetime(stock.date)
-    name = suit_code_name(code)
-    if flag:
-        stock[data_type].plot(figsize=(12,5),marker=".")
-        if end=='':
-            end='2021'
-        plt.title('{}: {}-{} {} Value Chart'.format(name,start[0:4],end[0:4],data_type))
-        plt.xlabel('date')
-        plt.ylabel(data_type)
-        plt.show()
-    return stock,name
+
+    dtime = pd.to_datetime(stock['date'])
+
+    v = (dtime.values - np.datetime64('1970-01-01T08:00:00Z')) / np.timedelta64(1, 'ms')
+
+    stock['date'] = v
+    stock = stock.rename(columns={'volume':'vol'})
+    stock = stock.drop('code',axis=1)
+
+
+    stock_dict = stock.to_dict('index')
+    ans = []
+    for i in stock_dict.values():
+        ans.append(i)
+
+    # stock.index = pd.to_datetime(stock.date)
+    # name = suit_code_name(code)
+    # if flag:
+    #     stock[data_type].plot(figsize=(12,5),marker=".")
+    #     if end=='':
+    #         end='2021'
+    #     plt.title('{}: {}-{} {} Value Chart'.format(name,start[0:4],end[0:4],data_type))
+    #     plt.xlabel('date')
+    #     plt.ylabel(data_type)
+    #     plt.show()
+    return ans
 
 def get_k_line(stock,code):
     kwargs = dict(
@@ -108,19 +122,24 @@ def profit(stock,code,start='2010-01-01',end=time_now):
     plt.show()
     
 if __name__ == '__main__':
-    stock_code = input('Please input the stock code: ')
-    start_date = input('Please input the start date with the format of "xx-xx-xx": ')
-    end_date = input('Please input the end date with the format of "xx-xx-xx": ')
-    k_type = input('Please input the ktype: ')
-    datatype = input('Please input the col you want to see: ')
+    # stock_code = input('Please input the stock code: ')
+    # start_date = input('Please input the start date with the format of "xx-xx-xx": ')
+    # end_date = input('Please input the end date with the format of "xx-xx-xx": ')
+    # k_type = input('Please input the ktype: ')
+    # datatype = input('Please input the col you want to see: ')
+    stock_code = '600519'
+    start_date = '2021-05-10'
+    end_date = '2021-08-10'
+    k_type = 'd'
+    datatype = 'volume'
     stock_info=get_stock(code=stock_code,start=start_date, end=end_date, ktype=k_type, data_type=datatype)
-    stock_real = get_realtime(stock_code)
-    stock_k_line = get_k_line(stock_info[0],stock_code)
-    if k_type=='' or k_type=='d' or k_type=='D':
-        #ma_a = ma(stock_info[0],stock_info[1],start_date,end_date)
-        pro = profit(stock_info[0],stock_code,start_date,end_date)
-    else:
-        stock_info2 = get_stock(code=stock_code,start=start_date, end=end_date, data_type=datatype,flag=False)
-        #ma_a = ma(stock_info2[0],stock_info2[1],start_date,end_date)
-        pro = profit(stock_info2[0],stock_code,start_date,end_date)
-    
+    # stock_real = get_realtime(stock_code)
+    # stock_k_line = get_k_line(stock_info[0],stock_code)
+    # if k_type=='' or k_type=='d' or k_type=='D':
+    #     #ma_a = ma(stock_info[0],stock_info[1],start_date,end_date)
+    #     pro = profit(stock_info[0],stock_code,start_date,end_date)
+    # else:
+    #     stock_info2 = get_stock(code=stock_code,start=start_date, end=end_date, data_type=datatype,flag=False)
+    #     #ma_a = ma(stock_info2[0],stock_info2[1],start_date,end_date)
+    #     pro = profit(stock_info2[0],stock_code,start_date,end_date)
+    #

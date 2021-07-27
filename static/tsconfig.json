@@ -1,0 +1,20 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": false,
+        "declarationMap": false,
+        "target": "es2015",
+        "module": "es2015",
+        "lib": [ "es2015", "dom" ],
+        "declaration": false,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "noResolve": false,
+        "preserveSymlinks": true,
+        "forceConsistentCasingInFileNames": true
+    }
+  }
+  

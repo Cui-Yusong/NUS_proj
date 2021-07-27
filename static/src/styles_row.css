@@ -1,0 +1,9 @@
+.wj-flexchart {
+    height: 300px;
+    /*width: 900px;*/
+    width: 90%;
+}
+
+body {
+    margin-bottom: 24pt;
+}
