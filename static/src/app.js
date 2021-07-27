@@ -69,7 +69,7 @@ class App {
             selectionMode: wjcGrid.SelectionMode.MultiRange,
             validateEdits: false,
             columns: [
-                { binding: 'id', header: 'Code', width: 100, isReadOnly: true },
+                { binding: 'code', header: 'Code', width: 100, isReadOnly: true },
                 // {
                 //     binding: 'date', header: 'Date', format: 'MMM d yyyy', isRequired: false, width: 130,
                 //     editor: new wjcInput.InputDate(document.createElement('div'), {
@@ -78,23 +78,15 @@ class App {
                 //     })
                 // },
                 {
-                    binding: 'countryId', header: 'Name', dataMap: this._countryMap, width: 145,
-                    cellTemplate: (ctx) => {
-                        const dataItem = ctx.row.dataItem;
-                        if (wjcCore.isUndefined(dataItem) || dataItem === null) {
-                            return '';
-                        }
-                        const country = '￥人民';
-                        return `${country}`;
-                    }
+                    binding: 'name', header: 'Name', width: 145,
                 },
-                { binding: 'price', header: 'Open', isRequired: false, width: 100 },
-                { binding: 'price', header: 'Close', format: 'c', isRequired: false, width: 100 },
+                { binding: 'open', header: 'Open', format: 'c', isRequired: false, width: 100 },
+                { binding: 'close', header: 'Close', format: 'c', isRequired: false, width: 100 },
 
-                { binding: 'price', header: 'High', format: 'c', isRequired: false, width: 100 },
+                { binding: 'high', header: 'High', format: 'c', isRequired: false, width: 100 },
 
-                { binding: 'price', header: 'Low', format: 'c', isRequired: false, width: 100 },
-                { binding: 'price', header: 'Amount', format: 'c', isRequired: false, width: 150 },
+                { binding: 'low', header: 'Low', format: 'c', isRequired: false, width: 100 },
+                { binding: 'amount', header: 'Amount', isRequired: false, width: 150 },
 
                 {
                     binding: 'history', header: 'History', width: 180, align: 'center', allowSorting: false,
