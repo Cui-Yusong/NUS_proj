@@ -78,7 +78,7 @@ class MyStrategy1(bt.Strategy):
     # 回测结束后输出结果（可省略，默认输出结果）
     def stop(self):
         self.log('(MA均线: %2d日) 期末总资金 %.2f' % (self.params.maperiod, self.broker.getvalue()), doprint=True)
-        f = open("logs.txt", "w")
+        f = open("./static/logs.log", "w")
         f.writelines(self.process)
         f.close()
 
