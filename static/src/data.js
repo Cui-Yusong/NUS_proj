@@ -76,28 +76,18 @@ export class DataService {
         return data;
     }
     _getItem(i, year) {
-        const date = new Date(year, i % 12, 25, i % 24, i % 60, i % 60);
-        const countryIndex = this._getRandomIndex(this._countries);
-        const productIndex = this._getRandomIndex(this._products);
-        const colorIndex = this._getRandomIndex(this._colors);
         const item = {
-            id: i,
-            date: date,
-            time: new Date(date.getTime() + Math.random() * 30 * (24 * 60 * 60 * 1000)),
-            countryId: this._countries[countryIndex].id,
-            productId: productIndex,
-            colorId: colorIndex,
-            price: 500,
+            code: i,
+            name: 'name',
+            open: 500,
+            close: 400,
+            high: 300,
+            low: 200,
+            amount: 100,
             change: 'temp',
             history: this.getHistoryData(),
-            discount: 700,
             rating: Math.ceil((i)%6),
-            active: i % 4 == 0,
-            size: 'temp',
-            weight: Math.floor(100 + Math.random() * 900),
-            quantity: Math.floor(Math.random() * 10),
-            description: "Across all our software products and services, our focus is on helping our customers achieve their goals. Our key principles – thoroughly understanding our customers' business objectives, maintaining a strong emphasis on quality, and adhering to the highest ethical standards – serve as the foundation for everything we do."
-        };
+                  };
         return item;
     }
 
