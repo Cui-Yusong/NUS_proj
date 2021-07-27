@@ -21,20 +21,31 @@
 
 
     <style>
+        button {
+            width: 110px; /*设置按钮宽度*/
+            height: 40px; /*设置按钮高度*/
+            color: white; /*字体颜色*/
+            background-color: cornflowerblue; /*按钮背景颜色*/
+            border-radius: 3px; /*让按钮变得圆滑一点*/
+            border-width: 0; /*消去按钮丑的边框*/
+            margin: 0;
+            outline: none; /*取消轮廓*/
+            font-family: KaiTi; /*字体设置为楷体*/
+            font-size: 17px; /*设置字体大小*/
+            text-align: center; /*字体居中*/
+            cursor: pointer; /*设置鼠标箭头手势*/
+        }
 
         .parent {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(6, 1fr);
+            grid-template-rows: 1fr repeat(2, 0.5fr) repeat(2, 1fr);
             grid-column-gap: 0px;
             grid-row-gap: 0px;
-            width: 100%;
-            height: 100%;
-
         }
 
         .div1 {
-            grid-area: 1 / 1 / 2 / 4;
+            grid-area: 1 / 1 / 2 / 6;
         }
 
         .div2 {
@@ -62,45 +73,8 @@
         }
 
         .div8 {
-            grid-area: 4 / 1 / 7 / 3;
+            grid-area: 4 / 1 / 6 / 4;
         }
-
-        .div9 {
-            grid-area: 5 / 3 / 6 / 4;
-        }
-
-        .div10 {
-            grid-area: 6 / 3 / 7 / 4;
-        }
-
-
-        /*    */
-        .parent2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: 3fr 2fr;
-            /*grid-column-gap: 500px;*/
-            grid-row-gap: 50px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .div12 {
-            grid-area: 1 / 1 / 2 / 2;
-        }
-
-        .div22 {
-            grid-area: 1 / 2 / 2 / 3;
-        }
-
-        .div32 {
-            grid-area: 2 / 1 / 3 / 2;
-        }
-
-        .div42 {
-            grid-area: 2 / 2 / 3 / 3;
-        }
-
     </style>
 
 </head>
@@ -115,14 +89,15 @@
             <div>
                 <h2 id="stock_name" style="text-align:center"> Name of the Stock</h2>
                 <h3 id="tmp_price" style="text-align:center">current price2</h3>
-<!--                <button onclick="test()">test</button>-->
+                <!--                <button onclick="test()">test</button>-->
 
                 <div class="parent">
                     <div class="div1" id="div1">
                         The simple introduction and some information about this stock.
                     </div>
                     <div class="div2" id="div2">
-                        Previous Close
+
+                        <h3 style="text-align:center">Previous Close</h3>
 
                     </div>
                     <div class="div3" id="div3">
@@ -144,14 +119,13 @@
                         <div id="theChart1"></div>
 
                     </div>
-                    <div class="div9">
-                        <button onclick="popup()">Buy</button>
-                    </div>
-                    <div class="div10">
-                        <button>Sell</button>
-                    </div>
+                    <!--                    <div class="div9">-->
+                    <!--                        <button onclick="popup()">Buy</button>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="div10">-->
+                    <!--                        <button>Sell</button>-->
+                    <!--                    </div>-->
                 </div>
-                <!--                <div id="theChart"></div>-->
             </div>
         </div>
         <div>
@@ -167,28 +141,34 @@
 
                         <div id="theChart"></div>
                     </div>
-                    <div class="div22">
+                    <div class="div22" id="predict">
 
                         <h3 style="text-align:center">predict price</h3>
+                        <div style="text-align:center">
+                            <button onclick="predict()">predict</button>
+                        </div>
+                        <h4 id="pred_ans"></h4>
 
-                        <div id="predChart"></div>
+
                     </div>
-                    <div class="div32">
+                    <div class="div32" id="backtest">
 
                         <h3 style="text-align:center">BackTest</h3>
-                        <p>
-                            The result of backtest：xxx
-                        </p>
-
+                        <input id="money" style="margin-left: 20px; width: 200px" placeholder="please input the money"/>
+                        <button onclick="backtest()">get answer</button>
+                        <a href="./logs.log" >
+                            download the logs
+                        </a>
+                        <h4 id="back_ans"></h4>
                     </div>
-                    <div class="div42">
+                    <!--                    <div class="div42">-->
 
-                        <h3 style="text-align:center">Investment Advice</h3>
-                        <p>
-                            Based on our prediction, we have the following investment advice:
-                            xxxx
-                        </p>
-                    </div>
+                    <!--                        <h3 style="text-align:center">Investment Advice</h3>-->
+                    <!--                        <p>-->
+                    <!--                            Based on our prediction, we have the following investment advice:-->
+                    <!--                            xxxx-->
+                    <!--                        </p>-->
+                    <!--                    </div>-->
                 </div>
 
 
@@ -218,15 +198,15 @@
         $.ajaxSettings.async = false;
         $.getJSON("/getPrice", {}).done(
             function (rs) {
-    //            stock_dict['Name'] = stock['name']
-    // stock_dict['intro'] = company
-    // stock_dict['price'] = stock['price']
-    // stock_dict['Previous Close'] = stock['pre_close']
-    // stock_dict['Open'] = stock['open']
-    // stock_dict['Bid'] = stock['bid']
-    // stock_dict['Ask'] = stock['ask']
-    // stock_dict['Range'] = stock['high']-stock['low']
-    // stock_dict['Vol'] = stock['volume']
+                //            stock_dict['Name'] = stock['name']
+                // stock_dict['intro'] = company
+                // stock_dict['price'] = stock['price']
+                // stock_dict['Previous Close'] = stock['pre_close']
+                // stock_dict['Open'] = stock['open']
+                // stock_dict['Bid'] = stock['bid']
+                // stock_dict['Ask'] = stock['ask']
+                // stock_dict['Range'] = stock['high']-stock['low']
+                // stock_dict['Vol'] = stock['volume']
                 console.log('eee')
                 console.log(rs)
                 name = rs['Name']
@@ -241,14 +221,55 @@
             }
         )
         $("#stock_name").html(name)
-        $("#tmp_price").html("<b>" + price + " </b>")
+        $("#tmp_price").html("<b>￥" + price + " </b>")
+
         $("#div1").html(intro)
-        $("#div2").html(pre_close)
-        $("#div3").html(open_p)
-        $("#div4").html(bid)
-        $("#div5").html(ask)
-        $("#div6").html(range)
-        $("#div7").html(vol)
+        $("#div2").html('<h3 style="text-align:center">Previous Close</h3>' + '<h4 style="text-align: center">￥' + pre_close + '</h4>')
+        $("#div3").html('<h3 style="text-align:center">Open</h3>' + '<h4 style="text-align: center">￥' + open_p + '</h4>')
+        $("#div4").html('<h3 style="text-align:center">Bid</h3>' + '<h4 style="text-align: center">￥' + bid + '</h4>')
+        $("#div5").html('<h3 style="text-align:center">Ask</h3>' + '<h4 style="text-align: center">￥' + ask + '</h4>')
+        $("#div6").html('<h3 style="text-align:center">Range</h3>' + '<h4 style="text-align: center">￥' + range + '</h4>')
+        $("#div7").html('<h3 style="text-align:center">Volume</h3>' + '<h4 style="text-align: center">' + vol + '</h4>')
+
+        // $("#backtest").html('<h3 style="text-align:center">BackTest</h3>' + '<h4 style="text-align: center">' + vol+'</h4>')
+        // $("#div3").html(open_p)
+        // $("#div4").html(bid)
+        // $("#div5").html(ask)
+        // $("#div6").html(range)
+        // $("#div7").html(vol)
+    }
+
+    function backtest() {
+        ans = []
+        money = $("#money").val();
+        $.getJSON("/backtest", {
+            "money": money
+        }).done(
+            function (rs) {
+                console.log(rs)
+                ans.push(rs['all'])
+                ans.push(rs['jing'])
+            }
+        )
+        $("#back_ans").html('<h4 style="text-align: center">After backtest, the total money is ￥' + ans[0]
+            + '.<br/>And the gross profit is ￥' + ans[1] + '</h4>')
+    }
+
+    function predict() {
+        var ans = '';
+        $.getJSON("/predict", {}).done(
+            function (rs) {
+                for (i = 0; i < 5; i++) {
+                    ans += rs[i]
+                    ans += '<br/>'
+                    console.log(ans)
+                }
+                // ans = rs['ans'];
+            }
+        )
+        // $("#predict").html('<h3 style="text-align:center">predict</h3>'
+        //     + '<h4 style="text-align: center">' + ans + '</h4>')
+        $("#pred_ans").html('<h4 style="text-align: center">' + ans + '</h4>')
     }
 </script>
 

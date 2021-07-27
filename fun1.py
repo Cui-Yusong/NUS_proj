@@ -144,15 +144,15 @@ if __name__ == '__main__':
     end_date = '2021-08-10'
     k_type = 'd'
     datatype = 'volume'
-    stock_info=get_stock(code=stock_code,start=start_date, end=end_date, ktype=k_type, data_type=datatype)
+    # stock_info=get_stock(code=stock_code,start=start_date, end=end_date, ktype=k_type, data_type=datatype)
     # for i in range(50):
     #     stock_real = get_realtime(stock_code)
     #     print(stock_real)
     #     time.sleep(1)
-    # pro = ts.pro_api('d22982798d6ecb9bb839fa6b54bafb5d0177f607ab8f39f8ed8eeeda')
-    # df = pro.stock_company(ts_code='600519.SH',
-    #                        fields='introduction')
-    # print(df['introduction'].values[0])
+    pro = ts.pro_api('d22982798d6ecb9bb839fa6b54bafb5d0177f607ab8f39f8ed8eeeda')
+    df = pro.stock_company(ts_code='001696.SZ',
+                           fields='introduction')
+    print(df['introduction'].values[0])
     # stock_k_line = get_k_line(stock_info[0],stock_code)
     # if k_type=='' or k_type=='d' or k_type=='D':
     #     #ma_a = ma(stock_info[0],stock_info[1],start_date,end_date)

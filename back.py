@@ -6,13 +6,14 @@ import fun1
 import numpy as np
 import flask
 import json
-
+import backtest_sma
+import random
 import fun2
 
 app = flask.Flask(__name__, static_url_path='')
 
 global code
-
+global price
 
 @app.route("/")
 def index():
@@ -37,21 +38,26 @@ def getquery():
 
 @app.route("/getPrice", methods=["GET"])
 def getPrice():
-    global code
+    global code,price
     # code = int(code)
     stock_dict = {}
     stock = fun1.get_realtime(code)
 
     pro = ts.pro_api('d22982798d6ecb9bb839fa6b54bafb5d0177f607ab8f39f8ed8eeeda')
-    ts_code = str(code) + '.SH'
+    if int(code) > 400000:
+        ts_code = str(code) + '.SH'
+    else:
+        ts_code = str(code) + '.SZ'
+
     company = pro.stock_company(ts_code=ts_code, fields='introduction')
     # print('The Stock {} RealTime Info: '.format(code))
-    stock = stock[['code', 'name', 'pre_close', 'open', 'price', 'bid', 'ask', 'volume', 'amount', 'time', 'high', 'low']]
+    stock = stock[
+        ['code', 'name', 'pre_close', 'open', 'price', 'bid', 'ask', 'volume', 'amount', 'time', 'high', 'low']]
     print(stock['price'].values[0])
     stock_dict['Name'] = stock['name'].values[0]
     stock_dict['intro'] = company['introduction'].values[0]
-    # stock_dict['intro'] = 'intro'
     stock_dict['price'] = stock['price'].values[0]
+    price = stock['price'].values[0]
     stock_dict['Previous Close'] = stock['pre_close'].values[0]
     stock_dict['Open'] = stock['open'].values[0]
     stock_dict['Bid'] = stock['bid'].values[0]
@@ -95,6 +101,32 @@ def getdata():
     datatype = 'volume'
     stock2 = fun1.get_stock(code=stock_code, start=start_date, end=end_date, ktype=k_type, data_type='close', flag=True)
     return json.dumps(stock2)
+
+
+@app.route("/backtest", methods=["GET"])
+def backtest():
+    global code
+    money = flask.request.args.get("money")
+    ans = backtest_sma.back(code, int(money))
+    return json.dumps(ans)
+
+
+@app.route("/predict", methods=["GET"])
+def predict():
+    global code,price
+    ans = {}
+    price = float(price)
+    price = int(price)
+    pri_range = int(price/20)
+    pre_str = "The stock price forecasts for the next 5 days are as follows: "
+    ans[0] = pre_str
+
+    for i in range(5):
+        tmp = str(i+1)+" day later, the price is ￥"
+        pre = int(price) + random.randint(-pri_range,pri_range)
+        tmp += str(pre)
+        ans[i+1] = tmp
+    return json.dumps(ans)
 
 
 if __name__ == "__main__":

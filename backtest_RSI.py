@@ -35,7 +35,7 @@ cerebro = bt.Cerebro()
 # 加载数据
 cerebro.adddata(data) 
 # 将交易策略加载到回测系统中
-cerebro.addstrategy(MyStrategy2) 
+cerebro.addstrategy(MyStrategy2)
 # 设置初始资本
 startcash = float(input('输入回测初始资本：'))
 cerebro.broker.setcash(startcash) 
