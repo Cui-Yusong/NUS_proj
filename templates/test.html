@@ -105,7 +105,7 @@
 
 </head>
 
-<body>
+<body onload="test()">
 
 <div class="container-fluid">
 
@@ -115,29 +115,29 @@
             <div>
                 <h2 id="stock_name" style="text-align:center"> Name of the Stock</h2>
                 <h3 id="tmp_price" style="text-align:center">current price2</h3>
-                <button onclick="test()">test</button>
+<!--                <button onclick="test()">test</button>-->
 
                 <div class="parent">
-                    <div class="div1">
+                    <div class="div1" id="div1">
                         The simple introduction and some information about this stock.
                     </div>
-                    <div class="div2">
+                    <div class="div2" id="div2">
                         Previous Close
 
                     </div>
-                    <div class="div3">
+                    <div class="div3" id="div3">
                         Open
                     </div>
-                    <div class="div4">
+                    <div class="div4" id="div4">
                         Bid
                     </div>
-                    <div class="div5">
+                    <div class="div5" id="div5">
                         Ask
                     </div>
-                    <div class="div6">
+                    <div class="div6" id="div6">
                         Day's Range
                     </div>
-                    <div class="div7">
+                    <div class="div7" id="div7">
                         Volume
                     </div>
                     <div class="div8">
@@ -207,27 +207,48 @@
 
     function test() {
         var name;
+        var intro;
         var price;
         var pre_close;
         var open_p;
         var bid;
+        var ask;
+        var range;
+        var vol;
         $.ajaxSettings.async = false;
         $.getJSON("/getPrice", {}).done(
             function (rs) {
-                //             stock_dict['Name'] = 'maotai'
-                // stock_dict['price'] = 14
-                // stock_dict['Previous Close'] = 13
-                // stock_dict['Open'] = 13.5
-                // stock_dict['Bid'] = 15
+    //            stock_dict['Name'] = stock['name']
+    // stock_dict['intro'] = company
+    // stock_dict['price'] = stock['price']
+    // stock_dict['Previous Close'] = stock['pre_close']
+    // stock_dict['Open'] = stock['open']
+    // stock_dict['Bid'] = stock['bid']
+    // stock_dict['Ask'] = stock['ask']
+    // stock_dict['Range'] = stock['high']-stock['low']
+    // stock_dict['Vol'] = stock['volume']
+                console.log('eee')
+                console.log(rs)
                 name = rs['Name']
                 price = rs['price']
                 pre_close = rs['Previous Close']
                 open_p = rs['Open']
                 bid = rs['Bid']
+                intro = rs['intro']
+                ask = rs['Ask']
+                range = rs['Range']
+                vol = rs['Vol']
             }
         )
-        $("#stock_name").html("<b>" + name + " </b>")
+        $("#stock_name").html(name)
         $("#tmp_price").html("<b>" + price + " </b>")
+        $("#div1").html(intro)
+        $("#div2").html(pre_close)
+        $("#div3").html(open_p)
+        $("#div4").html(bid)
+        $("#div5").html(ask)
+        $("#div6").html(range)
+        $("#div7").html(vol)
     }
 </script>
 

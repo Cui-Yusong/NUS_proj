@@ -167,9 +167,9 @@
         <div id="theGroupPanel"></div>
         <div id="theGrid"></div>
     </div>
-    <!--    <div id="theTabPanel">-->
-    <!--        <div>-->
-    <!--            <a>All Stock Information</a>-->
+<!--        <div id="theTabPanel">-->
+<!--            <div>-->
+<!--                <a>All Stock Information</a>-->
     <!--            -->
     <!--        </div>-->
 
@@ -264,7 +264,7 @@
 
 <script>
     function query() {
-        code = $("#theSearch").val();
+        code = $("#code").val();
         console.log(code)
         $.getJSON("/makequery", {
             "code": code
@@ -272,7 +272,7 @@
             function (rs) {
             }
         )
-        // window.open("http://127.0.0.1:5005/query");
+        window.open("./query");
     }
 
 </script>

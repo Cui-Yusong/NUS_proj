@@ -14,15 +14,14 @@ import { KeyValue, Country, DataService } from './data';
 import { ExportService } from './export';
 //
 class App {
-    constructor(dataSvc, exportSvc) {
+    constructor(dataSvc) {
         this._itemsCount = 500;
         this._lastId = this._itemsCount;
         this._dataSvc = dataSvc;
-        this._exportSvc = exportSvc;
         // initializes data maps
-        this._productMap = this._buildDataMap(this._dataSvc.getProducts());
+        // this._productMap = this._buildDataMap(this._dataSvc.getProducts());
         this._countryMap = new wjcGrid.DataMap(this._dataSvc.getCountries(), 'id', 'name');
-        this._colorMap = this._buildDataMap(this._dataSvc.getColors());
+        // this._colorMap = this._buildDataMap(this._dataSvc.getColors());
         // initializes cell templates
         this._historyCellTemplate = CellMaker.makeSparkline({
             markers: SparklineMarkers.High | SparklineMarkers.Low,
@@ -34,20 +33,20 @@ class App {
             label: 'rating'
         });
         // initializes data size
-        document.getElementById('itemsCount').addEventListener('change', (e) => {
-            const value = e.target.value;
-            this._itemsCount = wjcCore.changeType(value, wjcCore.DataType.Number);
-            this._handleItemsCountChange();
-        });
-        // initializes export
-        const btnExportToExcel = document.getElementById('btnExportToExcel');
-        this._excelExportContext = new ExcelExportContext(btnExportToExcel);
-        btnExportToExcel.addEventListener('click', () => {
-            this._exportToExcel();
-        });
-        document.getElementById('btnExportToPdf').addEventListener('click', () => {
-            this._exportToPdf();
-        });
+        // document.getElementById('itemsCount').addEventListener('change', (e) => {
+        //     const value = e.target.value;
+        //     this._itemsCount = wjcCore.changeType(value, wjcCore.DataType.Number);
+        //     this._handleItemsCountChange();
+        // });
+        // // initializes export
+        // const btnExportToExcel = document.getElementById('btnExportToExcel');
+        // this._excelExportContext = new ExcelExportContext(btnExportToExcel);
+        // btnExportToExcel.addEventListener('click', () => {
+        //     this._exportToExcel();
+        // });
+        // document.getElementById('btnExportToPdf').addEventListener('click', () => {
+        //     this._exportToPdf();
+        // });
         // initializes the grid
         this._initializeGrid();
         // initializes items source
@@ -70,87 +69,83 @@ class App {
             selectionMode: wjcGrid.SelectionMode.MultiRange,
             validateEdits: false,
             columns: [
-                { binding: 'id', header: 'ID', width: 70, isReadOnly: true },
+                { binding: 'id', header: 'Code', width: 100, isReadOnly: true },
+                // {
+                //     binding: 'date', header: 'Date', format: 'MMM d yyyy', isRequired: false, width: 130,
+                //     editor: new wjcInput.InputDate(document.createElement('div'), {
+                //         format: 'MM/dd/yyyy',
+                //         isRequired: false
+                //     })
+                // },
                 {
-                    binding: 'date', header: 'Date', format: 'MMM d yyyy', isRequired: false, width: 130,
-                    editor: new wjcInput.InputDate(document.createElement('div'), {
-                        format: 'MM/dd/yyyy',
-                        isRequired: false
-                    })
-                },
-                {
-                    binding: 'countryId', header: 'Country', dataMap: this._countryMap, width: 145,
+                    binding: 'countryId', header: 'Name', dataMap: this._countryMap, width: 145,
                     cellTemplate: (ctx) => {
                         const dataItem = ctx.row.dataItem;
                         if (wjcCore.isUndefined(dataItem) || dataItem === null) {
                             return '';
                         }
-                        const country = this._getCountry(ctx.item);
-                        return `<span class="flag-icon flag-icon-${country.flag}"></span> ${country.name}`;
+                        const country = '￥人民';
+                        return `${country}`;
                     }
                 },
-                { binding: 'price', header: 'Price', format: 'c', isRequired: false, width: 100 },
+                { binding: 'price', header: 'Open', isRequired: false, width: 100 },
+                { binding: 'price', header: 'Close', format: 'c', isRequired: false, width: 100 },
+
+                { binding: 'price', header: 'High', format: 'c', isRequired: false, width: 100 },
+
+                { binding: 'price', header: 'Low', format: 'c', isRequired: false, width: 100 },
+                { binding: 'price', header: 'Amount', format: 'c', isRequired: false, width: 150 },
+
                 {
                     binding: 'history', header: 'History', width: 180, align: 'center', allowSorting: false,
                     cellTemplate: this._historyCellTemplate
                 },
                 {
-                    binding: 'change', header: 'Change', align: 'right', width: 115,
-                    cellTemplate: (ctx) => {
-                        const dataItem = ctx.row.dataItem;
-                        if (wjcCore.isUndefined(dataItem) || dataItem === null) {
-                            return '';
-                        }
-                        const cls = this._getChangeCls(ctx.value);
-                        const value = this._formatChange(ctx.value);
-                        return `<span class="${cls}">${value}</span>`;
-                    }
-                },
-                {
                     binding: 'rating', header: 'Rating', width: 180, align: 'center', cssClass: 'cell-rating',
                     cellTemplate: this._ratingCellTemplate
-                },
-                {
-                    binding: 'time', header: 'Time', format: 'HH:mm', isRequired: false, width: 95,
-                    editor: new wjcInput.InputTime(document.createElement('div'), {
-                        format: 'HH:mm',
-                        isRequired: false
-                    })
-                },
-                {
-                    binding: 'colorId', header: 'Color', dataMap: this._colorMap, width: 145,
-                    cellTemplate: (ctx) => {
-                        const dataItem = ctx.row.dataItem;
-                        if (wjcCore.isUndefined(dataItem) || dataItem === null) {
-                            return '';
-                        }
-                        const color = this._getColor(ctx.item);
-                        return `<span class="color-tile" style="background: ${color.value}"></span> ${color.value}`;
-                    }
-                },
-                { binding: 'productId', header: 'Product', dataMap: this._productMap, width: 145 },
-                { binding: 'discount', header: 'Discount', format: 'p0', width: 130 },
-                { binding: 'active', header: 'Active', width: 100 }
+                }
+                // ,
+                // {
+                //     binding: 'time', header: 'Time', format: 'HH:mm', isRequired: false, width: 95,
+                //     editor: new wjcInput.InputTime(document.createElement('div'), {
+                //         format: 'HH:mm',
+                //         isRequired: false
+                //     })
+                // },
+                // {
+                //     binding: 'colorId', header: 'Volume', dataMap: this._colorMap, width: 145,
+                //     cellTemplate: (ctx) => {
+                //         const dataItem = ctx.row.dataItem;
+                //         if (wjcCore.isUndefined(dataItem) || dataItem === null) {
+                //             return '';
+                //         }
+                //         const color = this._getColor(ctx.item);
+                //         return `<span class="color-tile" style="background: ${color.value}"></span> ${color.value}`;
+                //     }
+                // },
+                // { binding: 'productId', header: 'Product', dataMap: this._productMap, width: 145 },
+                // { binding: 'discount', header: 'Discount', format: 'p0', width: 130 },
+                // { binding: 'active', header: 'Active', width: 100 }
             ]
         });
         // create the grid search box
-        new wjcGridSearch.FlexGridSearch('#theSearch', {
-            placeholder: 'Search',
-            grid: this._theGrid,
-            cssMatch: ''
-        });
-        // adds Excel-like filter
-        new wjcGridFilter.FlexGridFilter(this._theGrid, {
-            filterColumns: [
-                'id', 'date', 'time', 'countryId', 'productId',
-                'colorId', 'price', 'change', 'discount', 'rating', 'active'
-            ]
-        });
-        // adds group panel
-        new wjcGridGroupPanel.GroupPanel('#theGroupPanel', {
-            placeholder: 'Drag columns here to create groups',
-            grid: this._theGrid
-        });
+        // new wjcGridSearch.FlexGridSearch('#theSearch', {
+        //     placeholder: 'Search',
+        //     grid: this._theGrid,
+        //     cssMatch: ''
+        // });
+        // // adds Excel-like filter
+        // new wjcGridFilter.FlexGridFilter(this._theGrid, {
+        //     filterColumns: [
+        //         'id', 'date', 'time', 'countryId', 'productId',
+        //         'colorId', 'price', 'change', 'discount', 'rating', 'active'
+        //     ]
+        // });
+        // // adds group panel
+        // new wjcGridGroupPanel.GroupPanel('#theGroupPanel', {
+        //     placeholder: 'Drag columns here to create groups',
+        //     grid: this._theGrid
+        // });
     }
     _getCountry(item) {
         const country = this._countryMap.getDataItem(item.countryId);
@@ -201,7 +196,7 @@ class App {
         const view = new wjcCore.CollectionView(data, {
             getError: (item, prop) => {
                 const displayName = this._theGrid.columns.getColumn(prop).header;
-                return this._dataSvc.validate(item, prop, displayName);
+                return false;
             }
         });
         view.collectionChanged.addHandler((s, e) => {
@@ -285,8 +280,8 @@ document.readyState === 'complete' ? init() : window.onload = init;
 //
 function init() {
     const dataSvc = new DataService();
-    const exportSvc = new ExportService();
-    const app = new App(dataSvc, exportSvc);
+    // const exportSvc = new ExportService();
+    const app = new App(dataSvc);
     window.addEventListener('unload', () => {
         app.close();
     });
